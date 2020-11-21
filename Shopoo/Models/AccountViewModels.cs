@@ -6,7 +6,7 @@ namespace Shopoo.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [Display(Name = "Courrier électronique")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 
@@ -33,7 +33,7 @@ namespace Shopoo.Models
         public string Code { get; set; }
         public string ReturnUrl { get; set; }
 
-        [Display(Name = "Mémoriser ce navigateur ?")]
+        [Display(Name = "Se souvenir de moi ?")]
         public bool RememberBrowser { get; set; }
 
         public bool RememberMe { get; set; }
@@ -42,14 +42,14 @@ namespace Shopoo.Models
     public class ForgotViewModel
     {
         [Required]
-        [Display(Name = "Courrier électronique")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Courrier électronique")]
+        [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
 
@@ -58,7 +58,7 @@ namespace Shopoo.Models
         [Display(Name = "Mot de passe")]
         public string Password { get; set; }
 
-        [Display(Name = "Mémoriser le mot de passe ?")]
+        [Display(Name = "Se souvenir de moi ?")]
         public bool RememberMe { get; set; }
     }
 
@@ -66,7 +66,7 @@ namespace Shopoo.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Courrier électronique")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
@@ -85,7 +85,7 @@ namespace Shopoo.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Courrier électronique")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
@@ -106,7 +106,7 @@ namespace Shopoo.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "E-mail")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 }

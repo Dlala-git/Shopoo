@@ -1,14 +1,14 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Shopoo.Models;
+using Shopoo.Utils;
 
 namespace Shopoo.Controllers
 {
@@ -22,7 +22,7 @@ namespace Shopoo.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +34,9 @@ namespace Shopoo.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -73,22 +73,47 @@ namespace Shopoo.Controllers
                 return View(model);
             }
 
+            ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+
+            //var rolename = UserManager.GetRoles(user.Id).FirstOrDefault();
+
+            List<Produit> SessionProduitPanier = (List<Produit>)Session["Panier"];
+
             // Ceci ne comptabilise pas les échecs de connexion pour le verrouillage du compte
             // Pour que les échecs de mot de passe déclenchent le verrouillage du compte, utilisez shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    if (user != null)
+                    {
+                        bool _isAdmin = UserManager.IsInRole(user.Id, Role.Admin);
+                        bool _isClient = UserManager.IsInRole(user.Id, Role.Client);
+
+                        if (_isAdmin)
+                        {
+                            return RedirectToAction("Dashboard", "Home");
+                        }
+                        else if (_isClient)
+                        {
+                            return RedirectToAction("Index", "Commandes");
+                        }
+                        else if (_isClient && SessionProduitPanier != null)
+                        {
+                            return RedirectToAction("Voir", "Paniers");
+                        }
+                    }
+                    break;
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Tentative de connexion non valide.");
+                    ModelState.AddModelError("", "Identifiants incorrectes !");
                     return View(model);
             }
+            return View(model);
         }
 
         //
@@ -120,7 +145,7 @@ namespace Shopoo.Controllers
             // Si un utilisateur entre des codes incorrects pendant un certain intervalle, le compte de cet utilisateur 
             // est alors verrouillé pendant une durée spécifiée. 
             // Vous pouvez configurer les paramètres de verrouillage du compte dans IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -153,17 +178,25 @@ namespace Shopoo.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    // Ajout d'un role
+                    var _role = new RoleStore<IdentityRole>(new ApplicationDbContext());
+                    var _roleManager = new RoleManager<IdentityRole>(_role);
+
+                    await _roleManager.CreateAsync(new IdentityRole(Role.Client));
+                    await UserManager.AddToRoleAsync(user.Id, Role.Client);
+
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // Pour plus d'informations sur l'activation de la confirmation de compte et de la réinitialisation de mot de passe, visitez https://go.microsoft.com/fwlink/?LinkID=320771
                     // Envoyer un message électronique avec ce lien
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirmez votre compte", "Confirmez votre compte en cliquant <a href=\"" + callbackUrl + "\">ici</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Create", "Utilisateurs");
                 }
                 AddErrors(result);
             }
@@ -392,6 +425,7 @@ namespace Shopoo.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Session.Remove("Utilisateur");
             return RedirectToAction("Index", "Home");
         }
 
