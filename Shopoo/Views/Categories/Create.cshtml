@@ -1,0 +1,31 @@
+﻿@model Shopoo.Models.Categorie
+
+@{
+    ViewBag.Title = "Création catégorie";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Libelle, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Libelle, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Libelle, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Créer" class="btn btn-outline-primary" />
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Retour", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

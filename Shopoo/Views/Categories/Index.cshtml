@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Shopoo.Models.Categorie>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<p>
+    @Html.ActionLink("Ajouter", "Create", null, new { @class = "btn btn-outline-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Libelle)
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Libelle)
+            </td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a href="/categories/edit/@item.Id" class="btn btn-info rounded btn-sm" title="Editer"><i class="fa fa-edit"></i></a>
+                    <a href="/categories/details/@item.Id" class="btn btn-success rounded btn-sm mx-2" title="Détails"><i class="fa fa-list"></i></a>
+                    <a href="/categories/delete/@item.Id" class="btn btn-danger rounded btn-sm" title="Supprimer"><i class="fa fa-trash"></i></a>
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Shopoo.Models.Produit>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<p>
+    @Html.ActionLink("Ajouter Produit", "Create", null, new { @class = "btn btn-outline-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Libelle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prix)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            Quantitée en stock
+        </th>
+        <th>
+            Mis en vente
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <h6>
+                    @Html.DisplayFor(modelItem => item.Libelle)
+                </h6>
+                <span>
+                    <img src="~/images/produits/@Html.DisplayFor(modelItem => item.Image)" class="img-fluid" width="60px" title="Image produit @Html.DisplayFor(modelItem => item.Libelle)" />
+                </span>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prix)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantiteEnStock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MisEnVente)
+            </td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a href="/produits/edit/@item.Id" class="btn btn-info rounded btn-sm" title="Editer"><i class="fa fa-edit"></i></a>
+                    <a href="/produits/details/@item.Id" class="btn btn-success rounded btn-sm mx-2" title="Détails"><i class="fa fa-list"></i></a>
+                    <a href="/produits/delete/@item.Id" class="btn btn-danger rounded btn-sm" title="Supprimer"><i class="fa fa-trash"></i></a>
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>

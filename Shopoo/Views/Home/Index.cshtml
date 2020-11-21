@@ -1,31 +1,50 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model IEnumerable<Shopoo.Models.Produit>
+
+@{
+    ViewBag.Title = "Accueil";
+
+    int NombreProduits = 0;
+    if (Session["Panier"] != null)
+    {
+        NombreProduits = (Session["Panier"] as List<Shopoo.Models.Produit>).Count();
+    }
 }
 
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>Shopoo</h1>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <a href="/produits/details/@item.Id">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">@Html.DisplayFor(modelItem => item.Libelle)</h5>
+                        </div>
+                        <p class="text-center">
+                            <img class="img-fluid" width="150px" src="~/images/produits/@Html.DisplayFor(modelItem => item.Image)" title="Image produit @Html.DisplayFor(modelItem => item.Libelle)" />
+                        </p>
+                        <div class="card-body text-center">
+                            <h4>
+                                <span class="badge badge-pill badge-info">@Html.DisplayFor(modelItem => item.Prix) €</span>
+                            </h4>
+                            <h6>
+                                <span class="badge badge-pill badge-danger">@Html.DisplayFor(modelItem => item.QuantiteEnStock) En Stock</span>
+                            </h6>
+                            <p class="my-2">
+                                <a href="/paniers/AjouterAuPanier/@Html.DisplayFor(modelItem => item.Id)" class="btn btn-outline-primary btn-block btnAjoutProduitPanier">
+                                    <i class="fa fa-plus"></i> Ajouter au panier
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
     </div>
 </div>

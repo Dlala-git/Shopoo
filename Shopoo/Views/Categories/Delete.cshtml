@@ -1,0 +1,31 @@
+﻿@model Shopoo.Models.Categorie
+
+@{
+    ViewBag.Title = "Supprimer";
+}
+
+<h3>Supprimer cette catégorie ?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Libelle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Libelle)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Supprimer" class="btn btn-outline-danger" /> |
+        </div>
+    }
+    <p>
+        <a href="/categories/index" class="btn btn-outline-primary">Retour</a>
+    </p>
+</div>

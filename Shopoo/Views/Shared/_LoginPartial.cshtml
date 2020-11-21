@@ -3,20 +3,35 @@
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Se déconnecter</a></li>
-    </ul>
+        <ul class="nav navbar-nav navbar-right">
+            @{
+                Shopoo.Models.Utilisateur utilisateur = new Shopoo.Models.Utilisateur();
+
+                if (Session["Utilisateur"] != null)
+                {
+                    utilisateur = (Session["Utilisateur"] as Shopoo.Models.Utilisateur);
+                }
+            }
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    Bienvenue @utilisateur.Nom @utilisateur.Prenom
+                </a>
+                <div class="dropdown-menu">
+                    <a href="/utilisateurs/details/@utilisateur.Id" class="dropdown-item"><i class="fa fa-user"></i> Profil</a>
+                    <a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item">
+                        <i class="fa fa-sign-out"></i> Déconnecter
+                    </a>
+                </div>
+            </li>
+        </ul>
     }
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("S'inscrire", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Se connecter", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item"><a href="/account/login" class="nav-link"><i class="fa fa-user"></i> Mon compte</a></li>
     </ul>
 }

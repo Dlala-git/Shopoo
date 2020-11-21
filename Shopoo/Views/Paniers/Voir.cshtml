@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Shopoo.Models.Produit>
+
+@{
+    ViewBag.Title = "Panier";
+}
+
+@if (Model == null)
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            <h3 class="text-danger my-3">
+                <i class="fa fa-exclamation"></i> Panier vide !
+            </h3>
+            <a href="/">Retour à la boutique</a>
+        </div>
+    </div>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Libelle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prix)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <span><img src="~/images/produits/@Html.DisplayFor(modelItem => item.Image)" class="img-fluid" width="150px" title="Image produit @Html.DisplayFor(modelItem => item.Libelle)" /></span>
+                    @Html.DisplayFor(modelItem => item.Libelle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prix) €
+                </td>
+                <td>
+                    <a href="/paniers/supprimerProduit/@Html.DisplayFor(modelItem => item.UniqIdPanier)" class="btn btn-outline-danger">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <div class="row">
+        <div class="col-3 ml-auto text-center">
+            <h5 class="my-2 text-left">Total TTC</h5>
+            <h3 class="my-4 text-left">
+                @ViewBag.TotalTTC €
+            </h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3 ml-auto">
+            <a href="/paniers/ValiderPanier" class="btn btn-outline-primary">Valider ma Commande</a>
+        </div>
+    </div>
+}
+

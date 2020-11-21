@@ -1,45 +1,89 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Mon application ASP.NET</title>
-    @Styles.Render("~/Content/css")
+    <title>Shopoo | @ViewBag.Title</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Nom d'application", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Shopoo</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Accueil", "Index", "Home")</li>
-                    <li>@Html.ActionLink("À propos de", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li class="nav-item"><a href="/" class="nav-link"><i class="fa fa-home"></i> Accueil</a></li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        /*if (User.IsInRole(Shopoo.Utils.Role.Admin))
+                        {*/
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Administration</a>
+                            <div class="dropdown-menu">
+                                <a href="/utilisateurs/index" class="dropdown-item"><i class="fa fa-users"></i> Utilisateurs</a>
+                                <a href="/categories/index" class="dropdown-item"><i class="fa fa-list"></i> Categories</a>
+                                <a href="/produits/index" class="dropdown-item"><i class="fa fa-list"></i> Produits</a>
+                            </div>
+                        </li>
+                        /*}
+                        if (User.IsInRole(Shopoo.Utils.Role.Client))
+                        {*/
+                        <li class="nav-item">
+                            <a href="/commandes/index" class="nav-link"><i class="fa fa-credit-card"></i> Mes commandes</a>
+                        </li>
+                        /*}*/
+                    }
+                    <li class="nav-item">
+                        <a href="/home/contact" class="nav-link"><i class="fa fa-envelope"></i> Nous contacter</a>
+                    </li>
                 </ul>
-                @Html.Partial("_LoginPartial")
             </div>
+            <ul class="nav navbar-nav ml-auto">
+                @{
+                    var NombreProduits = 0;
+                    if (Session["Panier"] != null)
+                    {
+                        NombreProduits = (Session["Panier"] as List<Shopoo.Models.Produit>).Count();
+                    }
+                }
+                <li class="nav-item">
+                    <h3>
+                        <a href="/paniers/voir" class="nav-link">
+                            <i class="fa fa-shopping-basket"></i>
+                            <span class="badge badge-info rounded">@NombreProduits</span>
+                        </a>
+                    </h3>
+                </li>
+            </ul>
+            @Html.Partial("_LoginPartial")
         </div>
-    </div>
-    <div class="container body-content">
+    </nav>
+    <div class="container body-content my-5">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Mon application ASP.NET</p>
+            <p>Shopoo | &copy; @DateTime.Now.Year</p>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
     @RenderSection("scripts", required: false)
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="~/Scripts/toastNotification.js"></script>
 </body>
 </html>

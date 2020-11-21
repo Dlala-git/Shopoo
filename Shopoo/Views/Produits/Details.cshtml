@@ -1,0 +1,55 @@
+﻿@model Shopoo.Models.Produit
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <img src="~/images/produits/@Html.DisplayFor(modelItem => modelItem.Image)" class="img-fluid" title="Image produit @Html.DisplayFor(modelItem => modelItem.Libelle)" />
+        </div>
+        <div class="col-6">
+            <dl class="dl-horizontal">
+
+                <dd>
+                    @Html.DisplayFor(model => model.Libelle)
+                </dd>
+
+                <dd>
+                    <h4 class="badge badge-info">
+                        @Html.DisplayFor(model => model.Prix) €
+                    </h4>
+                </dd>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+
+                <dd>
+                    <h6 class="badge badge-danger">
+                        @Html.DisplayFor(model => model.QuantiteEnStock) en stock
+                    </h6>
+                </dd>
+                <dt>
+                    Mis en vente
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.MisEnVente)
+                </dd>
+                <dd>
+                    <p class="my-5">
+                        <a href="/paniers/AjouterAuPanier/@Html.DisplayFor(model => model.Id)" class="btn btn-outline-primary btn-block btnAjoutProduitPanier">
+                            <i class="fa fa-plus"></i> Ajouter au panier
+                        </a>
+                    </p>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Retour", "Index")
+    </p>
+</div>

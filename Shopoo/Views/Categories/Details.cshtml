@@ -1,0 +1,22 @@
+﻿@model Shopoo.Models.Categorie
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Libelle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Libelle)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    <a href="/categories/edit" class="btn btn-outline-info">Modifier</a>
+    <a href="/categories/index" class="btn btn-outline-primary">Retour</a>
+</p>

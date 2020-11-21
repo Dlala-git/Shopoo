@@ -1,0 +1,69 @@
+﻿@model Shopoo.Models.Utilisateur
+
+@{
+    ViewBag.Title = "Création de compte client";
+}
+
+<div class="row">
+    <div class="col-12">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4 class="my-3">Nouveau Cient</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nom, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Nom, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Prenom, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Prenom, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Prenom, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Adresse, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Adresse, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Adresse, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CodePostal, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.CodePostal, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CodePostal, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Ville, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Ville, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Ville, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TelephoneFixe, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.TelephoneFixe, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TelephoneFixe, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TelephoneMobile, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.TelephoneMobile, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TelephoneMobile, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Créer mon compte" class="btn btn-outline-primary" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
